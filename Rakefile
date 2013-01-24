@@ -17,10 +17,19 @@ Jeweler::Tasks.new do |gem|
   gem.name = "mongoid-doable"
   gem.homepage = "http://github.com/aproxacs/mongoid-doable"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %q{Able to do something like 'bookmark', 'like' or 'follow' with mongoid}
+  gem.description = %q{Able to do something like 'bookmark', 'like' or 'follow' with mongoid}
   gem.email = "aproxacs@gmail.com"
   gem.authors = ["aproxacs"]
+  gem.files = [
+    "Rakefile",
+    "README.md",
+    "VERSION",
+    "lib/mongoid-doable.rb",
+    "lib/mongoid/*.rb",
+    "spec/**/*.rb"
+  ]
+
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new
