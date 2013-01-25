@@ -39,7 +39,7 @@ module Mongoid
       #
 
       def doable(action, options = {})
-        doer_models[action.to_sym] = (options[:by] || :user).to_s.classify.constantize
+        doer_klass_names[action.to_sym] = (options[:by] || :user).to_s.classify
 
         action = action.to_s                                          # "like"
         base_action = (action[-1] == "e" ? action.chop : action)      # "lik"
@@ -51,10 +51,10 @@ module Mongoid
         field field_name, type: Array, default: [], versioned: false          # field :likers_ids, type: Array, default: [], versioned: false
         field counter_field_name, type: Integer, default: 0, versioned: false # field :likers_count, type: Integer, default: 0, versioned: false
 
-        define_method "#{doer_action}" do                             # def likers
-          klass = self.class.doer_models[action.to_sym]               #   klass = User
-          klass.where(:"_id".in => send(field_name))                  #   klass.where(:likers_ids.in => likers_ids)
-        end                                                           # end
+        define_method "#{doer_action}" do                                 # def likers
+          klass = self.class.doer_klass_names[action.to_sym].constantize  #   klass = User
+          klass.where(:"_id".in => send(field_name))                      #   klass.where(:likers_ids.in => likers_ids)
+        end                                                               # end
 
         define_method "#{passive_action}_by?" do |actor|              # def liked_by?(actor)
           return false if actor.blank?                                #   return false if actor.blank?
@@ -93,7 +93,7 @@ module Mongoid
         field_name = "#{ing_action}_#{target.to_s.pluralize}_ids"           # "liking_courses_ids"
         target_field_name = "#{doer_action}_ids"                            # "likers_ids"
         target_counter_name = "#{doer_action}_count"                        # "likers_count"
-        klass = (options[:class_name] || target.to_s.classify).constantize  # Course
+        klass_name = options[:class_name] || target.to_s.classify           # "Course"
 
         field field_name, type: Array, default: [], versioned: false        # field :liking_courses_ids, type Array, default: [], versioned: false
 
@@ -103,7 +103,7 @@ module Mongoid
 
         unless options[:embedded]
           define_method "#{ing_action}_#{target.to_s.pluralize}" do         # def liking_courses
-            klass.where(:"_id".in => send(field_name))           #   Course.where(:liking_courses_ids.in => liking_courses_ids)
+            klass_name.constantize.where(:"_id".in => send(field_name))     #   Course.where(:liking_courses_ids.in => liking_courses_ids)
           end                                                               # end
         end
 
@@ -152,8 +152,8 @@ module Mongoid
 
       end
 
-      def doer_models                                                   # def doer_models
-        @doer_models ||= {}                                             #   @doer_models ||= {}
+      def doer_klass_names                                                   # def doer_klass_names
+        @doer_klass_names ||= {}                                             #   @doer_klass_names ||= {}
       end                                                               # end
 
     end
