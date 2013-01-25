@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "mongoid-doable"
-  s.version = "0.1.0"
+  s.version = "0.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["aproxacs"]
-  s.date = "2013-01-24"
+  s.date = "2013-01-25"
   s.description = "Able to do something like 'bookmark', 'like' or 'follow' with mongoid"
   s.email = "aproxacs@gmail.com"
   s.extra_rdoc_files = [
